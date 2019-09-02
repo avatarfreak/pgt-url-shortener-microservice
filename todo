@@ -1,0 +1,44 @@
+app.get("/new/:url(*)", (req, res, next) => {
+  const { url } = req.params;
+  const expression = /[-a-zA-Z0-9@:%\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%\+.~#?&//=]*)?/gi;
+  if (expression.test(url)) {
+    const short = Math.floor(Math.random() * 100000).toString();
+
+    let data = new shortUrl({
+      originalUrl: url,
+      shortenUrl: short
+    });
+
+    data.save((err, dat) => {
+      if (err) {
+        res.send("Something went wrong.");
+      }
+    });
+
+    res.json(data);
+  }
+  let data = new shortUrl({
+    originalUrl: url,
+    shortenUrl: "Invalid"
+  });
+  res.json(data);
+});
+
+//redirect url
+app.get("/:short", (req, res, next) => {
+  const { shortUrl } = req.params;
+  //communication with mongoose
+  shortUrl.findOne({ shortenUrl: short }, (err, data) => {
+    if (err) res.send("Error reading fro database");
+
+    const re = new RegExp("^(https?)://", "i");
+    const validData = data.originalUrl;
+
+    if (re.test(validData)) {
+      res.redirect(301, data.originalUrl);
+    } else {
+      res.redirect(301, "http://" + data.originalUrl);
+    }
+  });
+});
+

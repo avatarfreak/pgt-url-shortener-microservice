@@ -1,0 +1,28 @@
+{
+  "name": "url-shortener-microservice",
+  "version": "1.0.0",
+  "description": "URL Shortener Microservice",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/avatarfreak/url-shortener-microservice.git"
+  },
+  "author": "avatarfreak",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/avatarfreak/url-shortener-microservice/issues"
+  },
+  "homepage": "https://github.com/avatarfreak/url-shortener-microservice#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.1.0",
+    "express": "^4.17.1",
+    "mongodb": "^3.3.2",
+    "mongoose": "^5.6.11"
+  }
+}
