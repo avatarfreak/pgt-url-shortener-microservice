@@ -3,14 +3,6 @@ const shortUrlModel = require("../models/shorturl");
 const validUrl = require("valid-url");
 const app = express();
 let duplicatUrl;
-//Read All
-app.get("/api/shorturl/new/", async (req, res, next) => {
-  const { url } = req.params;
-  await shortUrlModel
-    .find()
-    .then(data => res.send(data))
-    .catch(err => console.error(err));
-});
 
 //redirect short url
 app.get("/api/shorturl/:url(*)", async (req, res, next) => {
