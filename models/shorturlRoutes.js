@@ -1,11 +1,15 @@
 const express = require("express");
 const shortUrlModel = require("../models/shorturl");
+const validUrl = require("valid-url");
 const app = express();
-
+let duplicatUrl;
 //Read All
 app.get("/api/shorturl/new/", async (req, res, next) => {
   const { url } = req.params;
-  await shortUrlModel.find().then(data => res.send(data));
+  await shortUrlModel
+    .find()
+    .then(data => res.send(data))
+    .catch(err => console.error(err));
 });
 
 //redirect short url
@@ -15,13 +19,7 @@ app.get("/api/shorturl/:url(*)", async (req, res, next) => {
     .find({ shortUrl: url })
     .then(data =>
       data.map(d => {
-        const re = new RegExp("^(http|https)://", "i");
-        const validUrl = d.originalUrl;
-        if (re.test(validUrl)) {
-          res.redirect(301, d.originalUrl);
-        } else {
-          res.redirect(301, "http://" + d.originalUrl);
-        }
+        res.redirect(301, d.originalUrl);
       })
     )
     .catch(err => res.status(500).send(err));
@@ -30,18 +28,15 @@ app.get("/api/shorturl/:url(*)", async (req, res, next) => {
 //post request
 app.post("/api/shorturl/new/", async (req, res, next) => {
   const { url } = req.body;
-  const expression = /[-a-zA-Z0-9@:%\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%\+.~#?&//=]*)?/gi;
   const short = Math.floor(Math.random() * 100000).toString();
   let data;
-
   try {
-    if (expression.test(url)) {
+    if (validUrl.isUri(url)) {
       data = new shortUrlModel({ originalUrl: url, shortUrl: short });
       //save to dabase
       await data.save();
       res.json(data);
     }
-
     data = { originalUrl: url, error: "Invalid url" };
     res.json(data);
   } catch (err) {
