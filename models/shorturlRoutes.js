@@ -9,7 +9,7 @@ app.get("/api/shorturl/new/", async (req, res, next) => {
 });
 
 //redirect short url
-app.get("/api/shorturl/new/:url(*)", async (req, res, next) => {
+app.get("/api/shorturl/:url(*)", async (req, res, next) => {
   const { url } = req.params;
   const shorturl = await shortUrlModel
     .find({ shortUrl: url })
@@ -20,7 +20,7 @@ app.get("/api/shorturl/new/:url(*)", async (req, res, next) => {
         if (re.test(validUrl)) {
           res.redirect(301, d.originalUrl);
         } else {
-         res.redirect(301, "http://" + d.originalUrl); 
+          res.redirect(301, "http://" + d.originalUrl);
         }
       })
     )
