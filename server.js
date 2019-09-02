@@ -4,6 +4,7 @@ const express = require("express");
 const dotenv = require("dotenv");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const path = require("path");
 const mongoose = require("mongoose");
 const shorturlRouter = require("./models/shorturlRoutes");
 
@@ -25,7 +26,7 @@ mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true });
 app.use(shorturlRouter);
 //default route
 app.get("/", (req, res) => {
-  res.sendFile(__dirname + "/views/index.html");
+  res.sendFile(path.join(__dirname, "/views/index.html"));
 });
 
 app.listen(PORT, () => {
