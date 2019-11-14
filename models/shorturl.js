@@ -3,7 +3,9 @@ const mongoose = require("mongoose");
 //create database schema
 const urlSchema = new mongoose.Schema({
   originalUrl: {
-    type: String
+    type: String,
+    unique: true,
+    trim:true
   },
   shortUrl: {
     type: String

@@ -2,9 +2,9 @@
 
 const express = require("express");
 const dotenv = require("dotenv");
-const bodyParser = require("body-parser");
 const cors = require("cors");
 const path = require("path");
+const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const shorturlRouter = require("./models/shorturlRoutes");
 
@@ -21,7 +21,14 @@ const PORT = process.env.PORT || 3000;
 dotenv.config();
 
 //connect database
-mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true });
+mongoose.connect(process.env.MONGO_URI, {
+  useNewUrlParser: true,
+  useCreateIndex: true
+});
+const connection = mongoose.connection;
+connection.once('open', () => {
+  console.log("MongoDB database connection established successfully");
+})
 
 app.use(shorturlRouter);
 //default route

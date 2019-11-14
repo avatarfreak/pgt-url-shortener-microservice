@@ -3,6 +3,13 @@ const shortUrlModel = require("../models/shorturl");
 const validUrl = require("valid-url");
 const app = express();
 
+app.get("/api/shorturl/new/", (req, res) => {
+  shortUrlModel
+    .find()
+    .then(urls => res.json(urls))
+    .catch(err => res.status(400).json("Error: " + err));
+});
+
 //redirect short url
 app.get("/api/shorturl/:url(*)", async (req, res, next) => {
   const { url } = req.params;
@@ -31,7 +38,9 @@ app.post("/api/shorturl/new/", async (req, res, next) => {
     data = { originalUrl: url, error: "Invalid url" };
     res.json(data);
   } catch (err) {
-    res.status(500).send(err);
+    if(err.code === 11000){
+      res.status(400).send(`"${url}" already exist.`);
+    }
   }
 });
 
